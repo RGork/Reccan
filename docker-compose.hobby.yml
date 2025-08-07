@@ -1,13 +1,4 @@
-#
-# `docker-compose` file used ONLY for hobby deployments.
-#
-# Please take a look at https://posthog.com/docs/self-host/deploy/hobby
-# for more info.
-#
-# PostHog has sunset support for self-hosted K8s deployments.
-# See: https://posthog.com/blog/sunsetting-helm-support-posthog
-#
-
+version: '3.8'
 services:
     db:
         extends:
@@ -33,10 +24,6 @@ services:
             - redis7-data:/data
 
     clickhouse:
-        #
-        # Note: please keep the default version in sync across
-        #       `posthog` and the `charts-clickhouse` repos
-        #
         extends:
             file: docker-compose.base.yml
             service: clickhouse
