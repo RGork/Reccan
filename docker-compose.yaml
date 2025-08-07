@@ -55,8 +55,8 @@ services:
         condition: service_healthy
       clickhouse:
         condition: service_healthy
-    ports:
-      - "8080:8000" 
+    expose:
+      - "8000" 
     environment:
       SITE_URL: https://dashboard.reccan.nl
       SECRET_KEY: 62b4b1a783411893874d7f7a0b1ce48180941ebeabc126911a48426256d67ea0
