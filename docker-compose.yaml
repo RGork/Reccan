@@ -45,7 +45,7 @@ services:
       CLICKHOUSE_MIGRATIONS_CLUSTER: posthog_migrations
       SECRET_KEY: your_secret_key_here
     ports:
-      - "8000:8000"
+      - "8080:8080"
 
   worker:
     image: posthog/posthog:latest
