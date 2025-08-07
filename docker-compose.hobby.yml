@@ -109,8 +109,13 @@ services:
             ENCRYPTION_SALT_KEYS: $ENCRYPTION_SALT_KEYS
             OTEL_SERVICE_NAME: 'posthog'
             OTEL_EXPORTER_OTLP_ENDPOINT: ''
-            OTEL_SDK_DISABLED: 'true'
-        depends_on:
+            OTEL_SDK_DISABLED: true
+            IS_BEHIND_PROXY: true
+            TRUST_ALL_PROXIES: true
+            ALLOWED_HOSTS: *
+            DISABLE_SECURE_SSL_REDIRECT: true
+            SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
+            depends_on:
             - db
             - redis
             - clickhouse
