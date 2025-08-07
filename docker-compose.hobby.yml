@@ -360,8 +360,6 @@ services:
 
     cyclotron-janitor:
         image: ghcr.io/posthog/posthog/cyclotron-janitor:master
-        build:
-            context: ./posthog/rust
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -375,10 +373,6 @@ services:
 
     capture:
         image: ghcr.io/posthog/posthog/capture:master
-        build:
-            context: ./posthog/rust
-            args:
-                BIN: capture
         restart: on-failure
         environment:
             ADDRESS: '0.0.0.0:3000'
@@ -390,10 +384,6 @@ services:
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
-        build:
-            context: ./posthog/rust
-            args:
-                BIN: capture
         restart: on-failure
         environment:
             ADDRESS: '0.0.0.0:3000'
@@ -404,10 +394,6 @@ services:
 
     property-defs-rs:
         image: ghcr.io/posthog/posthog/property-defs-rs:master
-        build:
-            context: ./posthog/rust
-            args:
-                BIN: property-defs-rs
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -431,10 +417,6 @@ services:
 
     feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
-        build:
-            context: ./posthog/rust
-            args:
-                BIN: feature-flags
         restart: on-failure
         volumes:
             - ./share:/share
