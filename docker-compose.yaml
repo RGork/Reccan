@@ -71,6 +71,16 @@ services:
       DISABLE_SECURE_SSL_REDIRECT: "true"
       SECURE_PROXY_SSL_HEADER: HTTP_X_FORWARDED_PROTO,https
       IS_BEHIND_PROXY: "true"
+      TRUST_ALL_PROXIES: 'true'
+      ALLOWED_HOSTS: '*'
+      DISABLE_SECURE_SSL_REDIRECT: 'true'
+      SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.posthog.rule=Host(dashboard.reccan.nl)'
+      - 'traefik.http.routers.posthog.entrypoints=https'
+      - 'traefik.http.routers.posthog.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.posthog.loadbalancer.server.port=8000'
     command: bash -c "sleep 10 && ./bin/migrate && ./bin/docker-server"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/_health/"]
