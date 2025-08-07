@@ -26,6 +26,31 @@ services:
       timeout: 10s
       retries: 3
 
+
+zookeeper:
+    image: 'zookeeper:3.8.2'
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: 'bitnami/kafka:4.0.0'
+    restart: unless-stopped
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_CFG_PROCESS_ROLES: 'broker,controller'
+      KAFKA_CFG_NODE_ID: 1
+      KAFKA_CFG_CONTROLLER_QUORUM_VOTERS: '1@kafka:9093'
+      KAFKA_CFG_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP: 'CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT'
+      KAFKA_CFG_LISTENERS: 'PLAINTEXT://:9092,CONTROLLER://:9093'
+      KAFKA_CFG_ADVERTISED_LISTENERS: 'PLAINTEXT://kafka:9092'
+      KAFKA_CFG_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      ALLOW_PLAINTEXT_LISTENER: 'true'
+
+      
   clickhouse:
     image: clickhouse/clickhouse-server:25.3.6.56
     restart: unless-stopped
@@ -44,7 +69,22 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+  object_storage:
+    image: 'minio/minio:RELEASE.2025-02-18T16-25-55Z'
+    restart: unless-stopped
+    volumes:
+      - 'object_storage:/data'
+    environment:
+      MINIO_ROOT_USER: object_storage_root_user
+      MINIO_ROOT_PASSWORD: object_storage_root_password
+    command: 'server --address ":19000" --console-address ":19001" /data'
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:19000/minio/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
+      
   web:
     image: posthog/posthog:latest
     restart: unless-stopped
@@ -59,20 +99,40 @@ services:
       - "8000" 
     environment:
       SITE_URL: https://dashboard.reccan.nl
-      SECRET_KEY: 62b4b1a783411893874d7f7a0b1ce48180941ebeabc126911a48426256d67ea0
-      DATABASE_URL: postgres://posthog:posthog@postgres:5432/posthog
-      REDIS_URL: redis://redis:6379/
+      SECRET_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
+      ENCRYPTION_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
+DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+      REDIS_URL: 'redis://redis:6379/'
       CLICKHOUSE_HOST: clickhouse
       CLICKHOUSE_DATABASE: posthog
-      CLICKHOUSE_USER: default
-      CLICKHOUSE_PASSWORD: ""
-      CLICKHOUSE_SECURE: "false"
-      CLICKHOUSE_VERIFY: "false"
-      DISABLE_SECURE_SSL_REDIRECT: "true"
-      SECURE_PROXY_SSL_HEADER: HTTP_X_FORWARDED_PROTO,https
-      IS_BEHIND_PROXY: "true"
+      CLICKHOUSE_USER: posthog
+      CLICKHOUSE_PASSWORD: posthog
+      CLICKHOUSE_SECURE: 'false'
+      CLICKHOUSE_VERIFY: 'false'
+      CLICKHOUSE_CLUSTER: ''
+      CLICKHOUSE_REPLICATION: 'false'
+      CLICKHOUSE_DISABLE_EXTERNAL_SCHEMAS: 'true'
+      CLICKHOUSE_MIGRATIONS_CLUSTER: ''
+      KAFKA_HOSTS: 'kafka:9092'
+      OBJECT_STORAGE_ENABLED: 'true'
+      OBJECT_STORAGE_ENDPOINT: 'http://object_storage:19000'
+      OBJECT_STORAGE_ACCESS_KEY_ID: object_storage_root_user
+      OBJECT_STORAGE_SECRET_ACCESS_KEY: object_storage_root_password
+      OBJECT_STORAGE_BUCKET: posthog
+      SKIP_SERVICE_VERSION_REQUIREMENTS: '1'
+      SKIP_ASYNC_MIGRATIONS_SETUP: '1'
+      ASYNC_MIGRATIONS_DISABLE_AUTO_ROLLBACK: '1'
+      IS_BEHIND_PROXY: 'true'
       TRUST_ALL_PROXIES: 'true'
       ALLOWED_HOSTS: '*'
+      DISABLE_SECURE_SSL_REDIRECT: 'true'
+      SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
+    labels:
+      - 'traefik.enable=true'
+      - 'traefik.http.routers.posthog.rule=Host(dashboard.reccan.nl)'
+      - 'traefik.http.routers.posthog.entrypoints=https'
+      - 'traefik.http.routers.posthog.tls.certresolver=letsencrypt'
+      - 'traefik.http.services.posthog.loadbalancer.server.port=8000'
     command: bash -c "sleep 10 && ./bin/migrate && ./bin/docker-server"
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/_health/"]
@@ -94,9 +154,57 @@ services:
       CLICKHOUSE_PASSWORD: ""
       CLICKHOUSE_SECURE: "false"
       CLICKHOUSE_VERIFY: "false"
-      SECRET_KEY: 62b4b1a783411893874d7f7a0b1ce48180941ebeabc126911a48426256d67ea0
+      SECRET_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
+      ENCRYPTION_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
     command: bash -c "sleep 30 && ./bin/docker-worker-celery --with-scheduler"
-
+  plugins:
+    image: 'posthog/posthog:012e85e72ccc120dbf17e20ef5f108972c22a495'
+    restart: unless-stopped
+    depends_on:
+      - db
+      - redis
+      - clickhouse
+      - kafka
+      - object_storage
+    environment:
+      SERVICE_FQDN_WEB: 'https://dashboard.reccan.nl'
+      SITE_URL: 'https://dashboard.reccan.nl'
+      SECRET_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
+      ENCRYPTION_KEY: '6ed3734539385778bc50a84f241e123a12af04f7d03bbc820efdf04dfb1eb6e7'
+      DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+      REDIS_URL: 'redis://redis:6379/'
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_DATABASE: posthog
+      CLICKHOUSE_USER: posthog
+      CLICKHOUSE_PASSWORD: posthog
+      CLICKHOUSE_SECURE: 'false'
+      CLICKHOUSE_VERIFY: 'false'
+      CLICKHOUSE_CLUSTER: ''
+      CLICKHOUSE_REPLICATION: 'false'
+      CLICKHOUSE_DISABLE_EXTERNAL_SCHEMAS: 'true'
+      CLICKHOUSE_MIGRATIONS_CLUSTER: ''
+      KAFKA_HOSTS: 'kafka:9092'
+      OBJECT_STORAGE_ENABLED: 'true'
+      OBJECT_STORAGE_ENDPOINT: 'http://object_storage:19000'
+      OBJECT_STORAGE_ACCESS_KEY_ID: object_storage_root_user
+      OBJECT_STORAGE_SECRET_ACCESS_KEY: object_storage_root_password
+      OBJECT_STORAGE_BUCKET: posthog
+      SKIP_SERVICE_VERSION_REQUIREMENTS: '1'
+      SKIP_ASYNC_MIGRATIONS_SETUP: '1'
+      ASYNC_MIGRATIONS_DISABLE_AUTO_ROLLBACK: '1'
+      IS_BEHIND_PROXY: 'true'
+      TRUST_ALL_PROXIES: 'true'
+      ALLOWED_HOSTS: '*'
+      DISABLE_SECURE_SSL_REDIRECT: 'true'
+      SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
+    command: 'bash -c "sleep 90 && ./bin/plugin-server"'
+    healthcheck:
+      test: ["CMD", "ps", "aux", "|", "grep", "-v", "grep", "|", "grep", "plugin-server"]
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      
 volumes:
   postgres-data:
   clickhouse-data:
+  object_storage:
