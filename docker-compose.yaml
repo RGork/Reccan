@@ -1,80 +1,100 @@
 version: '3.8'
 
 services:
-  clickhouse:
-    image: clickhouse/clickhouse-server:latest
-    volumes:
-      - clickhouse-data:/var/lib/clickhouse
-      - ./clickhouse-clusters.xml:/etc/clickhouse-server/config.d/clusters.xml
-    ports:
-      - "9000:9000"
-      - "8123:8123"
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
-
   postgres:
-    image: postgres:13
+    image: postgres:13-alpine
+    restart: unless-stopped
     environment:
       POSTGRES_DB: posthog
       POSTGRES_USER: posthog
       POSTGRES_PASSWORD: posthog
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U posthog"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   redis:
-    image: redis:6
-    ports:
-      - "6379:6379"
+    image: redis:6-alpine
+    restart: unless-stopped
+    command: redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    restart: unless-stopped
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+    environment:
+      CLICKHOUSE_DB: posthog
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+    healthcheck:
+      test: ["CMD", "clickhouse-client", "--query", "SELECT 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   web:
     image: posthog/posthog:latest
+    restart: unless-stopped
     depends_on:
-      - clickhouse
-      - postgres
-      - redis
-    environment:
-      DATABASE_URL: postgres://posthog:posthog@postgres:5432/posthog
-      REDIS_URL: redis://redis:6379
-      CLICKHOUSE_HOST: clickhouse
-      CLICKHOUSE_DATABASE: default
-      CLICKHOUSE_CLUSTER: posthog
-      CLICKHOUSE_MIGRATIONS_CLUSTER: posthog_migrations
-      SECRET_KEY: your_secret_key_here
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      clickhouse:
+        condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8080:8000"  # Externe 8080 naar interne 8000
+    environment:
+      SITE_URL: https://dashboard.reccan.nl
+      SECRET_KEY: your_very_long_secret_key_here_at_least_50_characters_long
+      DATABASE_URL: postgres://posthog:posthog@postgres:5432/posthog
+      REDIS_URL: redis://redis:6379/
+      CLICKHOUSE_HOST: clickhouse
+      CLICKHOUSE_DATABASE: posthog
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_SECURE: "false"
+      CLICKHOUSE_VERIFY: "false"
+      DISABLE_SECURE_SSL_REDIRECT: "true"
+      SECURE_PROXY_SSL_HEADER: HTTP_X_FORWARDED_PROTO,https
+      IS_BEHIND_PROXY: "true"
+    command: bash -c "sleep 10 && ./bin/migrate && ./bin/docker-server"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/_health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
 
   worker:
     image: posthog/posthog:latest
-    command: worker
+    restart: unless-stopped
     depends_on:
       - web
     environment:
       DATABASE_URL: postgres://posthog:posthog@postgres:5432/posthog
-      REDIS_URL: redis://redis:6379
+      REDIS_URL: redis://redis:6379/
       CLICKHOUSE_HOST: clickhouse
-      CLICKHOUSE_DATABASE: default
-      CLICKHOUSE_CLUSTER: posthog
-      CLICKHOUSE_MIGRATIONS_CLUSTER: posthog_migrations
-      SECRET_KEY: your_secret_key_here
-
-  plugin-server:
-    image: posthog/posthog:latest
-    command: plugin-server
-    depends_on:
-      - web
-    environment:
-      DATABASE_URL: postgres://posthog:posthog@postgres:5432/posthog
-      REDIS_URL: redis://redis:6379
-      CLICKHOUSE_HOST: clickhouse
-      CLICKHOUSE_DATABASE: default
-      CLICKHOUSE_CLUSTER: posthog
-      CLICKHOUSE_MIGRATIONS_CLUSTER: posthog_migrations
-      SECRET_KEY: your_secret_key_here
+      CLICKHOUSE_DATABASE: posthog
+      CLICKHOUSE_USER: default
+      CLICKHOUSE_PASSWORD: ""
+      CLICKHOUSE_SECURE: "false"
+      CLICKHOUSE_VERIFY: "false"
+      SECRET_KEY: your_very_long_secret_key_here_at_least_50_characters_long
+    command: bash -c "sleep 30 && ./bin/docker-worker-celery --with-scheduler"
 
 volumes:
-  clickhouse-data:
   postgres-data:
+  clickhouse-data:
