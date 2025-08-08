@@ -430,7 +430,7 @@ services:
         ports:
             - '8666:8080'
         volumes:
-            - ./docker/livestream/configs-hobby.yml:/configs/configs.yml
+            - ./livestream/configs/configs.yml:/configs/configs.yml
         depends_on:
             kafka:
                 condition: service_started
