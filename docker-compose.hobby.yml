@@ -117,6 +117,10 @@ services:
             OTEL_SDK_DISABLED: 'true'
             DISABLE_SECURE_SSL_REDIRECT: 'true'
             IS_BEHIND_PROXY: 'true'
+            TRUST_ALL_PROXIES: true
+            ALLOWED_HOSTS: "*"
+            DISABLE_SECURE_SSL_REDIRECT: true
+            SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
@@ -251,6 +255,10 @@ services:
             OTEL_SDK_DISABLED: 'true'
             DISABLE_SECURE_SSL_REDIRECT: 'true'
             IS_BEHIND_PROXY: 'true'
+            TRUST_ALL_PROXIES: true
+            ALLOWED_HOSTS: "*"
+            DISABLE_SECURE_SSL_REDIRECT: true
+            SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
@@ -343,6 +351,10 @@ services:
             OTEL_SDK_DISABLED: 'true'
             DISABLE_SECURE_SSL_REDIRECT: 'true'
             IS_BEHIND_PROXY: 'true'
+            TRUST_ALL_PROXIES: true
+            ALLOWED_HOSTS: "*"
+            DISABLE_SECURE_SSL_REDIRECT: true
+            SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
