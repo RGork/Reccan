@@ -135,12 +135,22 @@ services:
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
 
+    
+    geolite-downloader:
+        image: busybox
+        command: /bin/sh -c "wget -qO /data/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && sleep 3600"
+        volumes:
+            - geolite-data:/data
+        restart: "no"
+
+        
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: /compose/start
         restart: on-failure
         volumes:
             - ./compose:/compose
+            - geolite-data:/app/geolite
         environment:
             SITE_URL: https://$DOMAIN
             LIVESTREAM_HOST: 'https://${DOMAIN}:8666'
@@ -420,17 +430,18 @@ services:
         image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
         volumes:
-            - ./share:/share
+          - geolite-data:/share
         environment:
-            WRITE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            READ_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            MAXMIND_DB_PATH: '/share/GeoLite2-City.mmdb'
-            REDIS_URL: 'redis://redis:6379/'
-            ADDRESS: '0.0.0.0:3001'
-            RUST_LOG: 'info'
+          WRITE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+          READ_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+          MAXMIND_DB_PATH: '/share/GeoLite2-City.mmdb'
+          REDIS_URL: 'redis://redis:6379/'
+          ADDRESS: '0.0.0.0:3001'
+          RUST_LOG: 'info'
         depends_on:
-            - db
-            - redis
+          - db
+          - redis
+          - geolite-downloader
 
 volumes:
     zookeeper-data:
@@ -444,3 +455,4 @@ volumes:
     redis-data:
     redis7-data:
     kafka-data:
+    geolite-data:
