@@ -172,6 +172,9 @@ services:
             DISABLE_SECURE_SSL_REDIRECT: true
             SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
+            EXTERNAL_URL: https://$DOMAIN  
+            CSRF_TRUSTED_ORIGINS: https://$DOMAIN
+            ALLOWED_HOSTS: $DOMAIN,localhost,127.0.0.1
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
@@ -188,6 +191,8 @@ services:
             PGPASSWORD: posthog
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
+        expose:
+            - "8000"
         depends_on:
             - db
             - redis
@@ -238,9 +243,9 @@ services:
         command: -c 'mkdir -p /data/posthog && minio server --address ":19000" --console-address ":19001" /data'
         volumes:
             - objectstorage:/data
-        ports:
-            - '19000:19000'
-            - '19001:19001'
+        expose:
+            - "19000"
+            - "19001"
 
     asyncmigrationscheck:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
@@ -288,8 +293,8 @@ services:
             - POSTGRES_PWD=posthog
             - POSTGRES_SEEDS=db
             - DYNAMIC_CONFIG_FILE_PATH=config/dynamicconfig/development-sql.yaml
-        ports:
-            - 7233:7233
+        expose:
+            - "7233"
         volumes:
             - ./docker/temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
         depends_on:
@@ -307,7 +312,7 @@ services:
             - ES_JAVA_OPTS=-Xms256m -Xmx256m
             - xpack.security.enabled=false
         expose:
-            - 9200
+            - "9200"
         volumes:
             - /var/lib/elasticsearch/data
 
@@ -324,8 +329,8 @@ services:
     temporal-ui:
         image: temporalio/ui:2.31.2
         restart: on-failure
-        ports:
-            - 8081:8080
+        expose:
+            - "8080"
         environment:
             - TEMPORAL_ADDRESS=temporal:7233
             - TEMPORAL_CORS_ORIGINS=http://localhost:3000
@@ -362,7 +367,7 @@ services:
             CLICKHOUSE_APP_PASSWORD: 'apppass'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
-            REDIS_URL: 'redis://redis:6379/'
+            - REDIS_URL: 'redis://redis:6379/'
             PGHOST: db
             PGUSER: posthog
             PGPASSWORD: posthog
@@ -400,6 +405,8 @@ services:
             REDIS_URL: 'redis://redis:6379/'
             CAPTURE_MODE: events
             RUST_LOG: 'info,rdkafka=warn'
+        expose:
+            - "3000"
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
@@ -410,6 +417,8 @@ services:
             KAFKA_HOSTS: 'kafka:9092'
             REDIS_URL: 'redis://redis:6379/'
             CAPTURE_MODE: recordings
+        expose:
+            - "3000"
 
     property-defs-rs:
         image: ghcr.io/posthog/posthog/property-defs-rs:master
@@ -426,8 +435,8 @@ services:
         restart: on-failure
         environment:
             - LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
-        ports:
-            - '8666:8080'
+        expose:
+            - "8080"
         volumes:
             - ./livestream/configs/configs.yml:/configs/configs.yml
         depends_on:
@@ -446,6 +455,8 @@ services:
           REDIS_URL: 'redis://redis:6379/'
           ADDRESS: '0.0.0.0:3001'
           RUST_LOG: 'info'
+        expose:
+          - "3001"
         depends_on:
           - db
           - redis
