@@ -1,15 +1,26 @@
 debug: true
+
 kafka:
-    brokers: 'localhost:9092,localhost:9093'
+    brokers: 'kafka:9092'
     topic: 'topic'
     group_id: 'livestream-dev'
+
+redis:
+    addr: 'redis:6379'
+    password: '' # laat leeg als je geen wachtwoord hebt
+    db: 0
+
 mmdb:
     path: 'mmdb.db'
+
 jwt:
-    token: '<randomly generated secret key>'
+    token: '<randomly generated secret key>' # genereer zelf een lang geheim
+
 postgres:
-    url: 'postgres://postgres:postgres@localhost:5432/postgres'
+    url: 'postgres://postgres:postgres@postgres:5432/postgres'
+
 cors_allow_origins:
-    - "https://example.com"
-    - "https://sub.example.com"
+    - "https://reccan.nl"
+    - "https://dashboard.reccan.nl"
+
 parallelism: 7
