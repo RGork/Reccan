@@ -343,10 +343,8 @@ services:
 
     temporal-django-worker:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
-        command: /compose/temporal-django-worker
+        command: ./bin/temporal-django-worker
         restart: on-failure
-        volumes:
-            - ./compose:/compose
         environment:
             SITE_URL: https://$DOMAIN
             SECRET_KEY: $POSTHOG_SECRET
