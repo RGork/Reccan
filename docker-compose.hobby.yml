@@ -149,10 +149,9 @@ services:
         
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
-        command: /compose/start
+        command: python manage.py runserver 0.0.0.0:8000
         restart: on-failure
         volumes:
-            - ./compose:/compose
             - geolite-data:/app/geolite
         environment:
             SITE_URL: https://$DOMAIN
