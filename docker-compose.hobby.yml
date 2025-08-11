@@ -237,6 +237,12 @@ services:
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
             CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         depends_on:
             - db
             - redis
