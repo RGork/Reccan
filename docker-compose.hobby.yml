@@ -290,7 +290,7 @@ services:
             replicas: 0
 
     # Temporal containers
-    temporal:
+     temporal:
         image: temporalio/auto-setup:1.20.0
         restart: on-failure
         environment:
@@ -300,11 +300,8 @@ services:
             - POSTGRES_USER=posthog
             - POSTGRES_PWD=posthog
             - POSTGRES_SEEDS=db
-            - DYNAMIC_CONFIG_FILE_PATH=/etc/temporal/config/dynamicconfig/development-sql.yaml
         expose:
             - "7233"
-        volumes:
-            - ./docker/temporal/dynamicconfig:/etc/temporal/config/dynamicconfig
         depends_on:
             - db
 
