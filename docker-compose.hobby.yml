@@ -512,6 +512,16 @@ services:
           REDIS_URL: 'redis://redis:6379/'
           ADDRESS: '0.0.0.0:3001'
           RUST_LOG: 'info'
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
           - "3001"
         depends_on:
