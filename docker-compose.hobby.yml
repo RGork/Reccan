@@ -505,7 +505,7 @@ services:
         expose:
             - "8080"
         volumes:
-            - ./livestream/configs/configs.yml:/configs/configs.yml
+            - /data/coolify/applications/rs8cwk4o4kcsocssscs4o4gg/livestream/configs/configs.yml:/configs/configs.yml
         depends_on:
             kafka:
                 condition: service_started
