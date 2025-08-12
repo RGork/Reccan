@@ -491,7 +491,17 @@ services:
         image: 'ghcr.io/posthog/livestream:main'
         restart: on-failure
         environment:
-            - LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
+            LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
             - "8080"
         volumes:
