@@ -140,6 +140,7 @@ services:
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
 
+    
     geolite-downloader:
         image: busybox
         command: /bin/sh -c "wget -qO /data/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && sleep 3600"
@@ -147,6 +148,7 @@ services:
             - geolite-data:/data
         restart: "no"
 
+        
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: python manage.py runserver 0.0.0.0:8000
@@ -503,7 +505,7 @@ services:
         expose:
             - "8080"
         volumes:
-            - ./livestream/configs/configs.yml:/configs/configs.yml
+            - /data/coolify/applications/rs8cwk4o4kcsocssscs4o4gg/livestream/configs/configs.yml:/configs/configs.yml
         depends_on:
             kafka:
                 condition: service_started
