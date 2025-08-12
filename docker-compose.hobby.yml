@@ -491,7 +491,7 @@ services:
         image: 'ghcr.io/posthog/livestream:main'
         restart: on-failure
         environment:
-            LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
+            LIVESTREAM_JWT_SECRET: ${POSTHOG_SECRET}
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
