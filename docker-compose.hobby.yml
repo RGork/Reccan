@@ -503,7 +503,7 @@ services:
         expose:
             - "8080"
         volumes:
-            - /livestream/configs/configs.yml:/configs/configs.yml
+            - ./livestream/configs/configs.yml:/configs/configs.yml
         depends_on:
             kafka:
                 condition: service_started
