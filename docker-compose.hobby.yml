@@ -406,6 +406,16 @@ services:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             KAFKA_HOSTS: 'kafka:9092'
             KAFKA_TOPIC: 'clickhouse_app_metrics2'
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         depends_on:
             db:
                 condition: service_healthy
@@ -422,6 +432,16 @@ services:
             REDIS_URL: 'redis://redis:6379/'
             CAPTURE_MODE: events
             RUST_LOG: 'info,rdkafka=warn'
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
             - "3000"
 
@@ -434,6 +454,16 @@ services:
             KAFKA_HOSTS: 'kafka:9092'
             REDIS_URL: 'redis://redis:6379/'
             CAPTURE_MODE: recordings
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
             - "3000"
 
@@ -446,12 +476,32 @@ services:
             SKIP_WRITES: 'false'
             SKIP_READS: 'false'
             FILTER_MODE: 'opt-out'
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
 
     livestream:
         image: 'ghcr.io/posthog/livestream:main'
         restart: on-failure
         environment:
             - LIVESTREAM_JWT_SECRET=${POSTHOG_SECRET}
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
             - "8080"
         volumes:
@@ -472,6 +522,16 @@ services:
           REDIS_URL: 'redis://redis:6379/'
           ADDRESS: '0.0.0.0:3001'
           RUST_LOG: 'info'
+            CLICKHOUSE_HOST: 'clickhouse'
+            CLICKHOUSE_DATABASE: 'posthog'
+            CLICKHOUSE_SECURE: 'false'
+            CLICKHOUSE_VERIFY: 'false'
+            CLICKHOUSE_API_USER: 'api'
+            CLICKHOUSE_API_PASSWORD: 'apipass'
+            CLICKHOUSE_APP_USER: 'app'
+            CLICKHOUSE_APP_PASSWORD: 'apppass'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
         expose:
           - "3001"
         depends_on:
