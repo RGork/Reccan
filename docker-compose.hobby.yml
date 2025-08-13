@@ -349,7 +349,7 @@ services:
             - "8080"
         environment:
             - TEMPORAL_ADDRESS=temporal:7233
-            - TEMPORAL_CORS_ORIGINS=http://localhost:3000
+            - TEMPORAL_CORS_ORIGINS=https://$DOMAIN,http://localhost:3000
             - TEMPORAL_CSRF_COOKIE_INSECURE=true
         depends_on:
             temporal:
