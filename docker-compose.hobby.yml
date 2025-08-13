@@ -47,6 +47,8 @@ services:
             - zookeeper
         environment:
             CLICKHOUSE_SKIP_USER_SETUP: 1
+            CLICKHOUSE_CONFIG_MACROS_HOSTCLUSTERTYPE: single
+            CLICKHOUSE_CONFIG_MACROS_HOSTCLUSTERROLE: replica
         volumes:
             - ./posthog/idl:/idl
             - ./docker/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
