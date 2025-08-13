@@ -31,7 +31,7 @@
     <macros>
         <shard>01</shard>
         <replica>ch1</replica>
-        <hostClusterType>online</hostClusterType>
+        <hostClusterType>single-node</hostClusterType>
         <hostClusterRole>data</hostClusterRole>
     </macros>
 </clickhouse>
