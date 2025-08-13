@@ -2,6 +2,8 @@
 !.devcontainer
 !.kearc
 !bin
+!docker
+!livestream
 !common/hogvm
 !common/esbuilder
 !common/plugin_transpiler/*.*
