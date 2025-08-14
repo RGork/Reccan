@@ -525,7 +525,7 @@ services:
                 
     feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
-        command: /bin/sh -c "while true; do wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && echo 'GeoLite updated'; sleep 86400; done"
+        command: /bin/sh -c "while true; do wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb"
         restart: on-failure
         volumes:
           - geolite-data:/share
