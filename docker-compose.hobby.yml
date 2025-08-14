@@ -145,9 +145,9 @@ services:
     
     geolite-downloader:
         image: busybox
-        command: /bin/sh -c "wget -qO /data/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && sleep 3600"
+        command: /bin/sh -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && sleep 3600"
         volumes:
-            - geolite-data:/data
+            - geolite-data:/share
         restart: "no"
 
         
@@ -507,10 +507,13 @@ services:
             - "8080"
         volumes:
             - ./livestream/configs/configs.yml:/configs/configs.yml
+            - geolite-data:/share
         depends_on:
             kafka:
                 condition: service_started
-
+            geolite-downloader:
+                condition: service_completed_successfully
+                
     feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
