@@ -18,7 +18,7 @@ services:
     redis:
         image: redis:6.2.7-alpine
         restart: on-failure
-        command: redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb
+        command: sh -c "wget -qO /geolite/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb || echo 'GeoLite download failed'; redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb"
         healthcheck:
             test: ['CMD', 'redis-cli', 'ping']
             interval: 3s
@@ -520,13 +520,11 @@ services:
         depends_on:
             kafka:
                 condition: service_started
-            feature-flags:
-                condition: service_completed_successfully
+            redis:
+                condition: service_healthy 
                 
 feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
-        entrypoint: /bin/sh
-        command: -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb || echo 'Download failed'; exec /feature-flags"
         restart: on-failure
         volumes:
           - geolite-data:/share
