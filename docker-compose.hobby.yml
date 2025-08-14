@@ -468,8 +468,10 @@ services:
         expose:
             - "3000"
         depends_on:
-            - redis
-            - kafka
+          redis:
+            condition: service_started
+          kafka:
+            condition: service_started
 
     property-defs-rs:
         image: ghcr.io/posthog/posthog/property-defs-rs:master
@@ -490,6 +492,9 @@ services:
             CLICKHOUSE_APP_PASSWORD: 'apppass'
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+        depends_on:
+            kafka:
+                condition: service_started
 
     livestream:
         image: 'ghcr.io/posthog/livestream:main'
