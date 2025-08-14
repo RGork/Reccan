@@ -144,15 +144,11 @@ services:
             CDP_API_URL: 'http://plugins:6738'
             
     geolite-downloader:
-        image: busybox
-        command: /bin/sh -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb"
-        volumes:
-            - geolite-data:/share
-        restart: "no"
-        deploy:
-            restart_policy:
-                condition: on-failure
-                max_attempts: 3
+            image: busybox
+            command: /bin/sh -c "while true; do wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && echo 'GeoLite updated'; sleep 86400; done"
+            volumes:
+                - geolite-data:/share
+            restart: on-failure
         
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
