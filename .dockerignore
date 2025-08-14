@@ -2,11 +2,12 @@
 !.devcontainer
 !.kearc
 !bin
-!docker/*
+!docker/**
 !docker/clickhouse/
-!docker/clickhouse/config.xml
+!docker/clickhouse/*.xml
 !docker/clickhouse/config.d/
 !docker/clickhouse/config.d/*
+!livestream/**
 !livestream
 !livestream/configs
 !livestream/configs/*
