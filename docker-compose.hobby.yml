@@ -2,6 +2,7 @@ version: '3.8'
 services:
     db:
         image: ${DOCKER_REGISTRY_PREFIX:-}postgres:12-alpine
+        command: /bin/sh -c "while true; do wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && echo 'GeoLite updated'; sleep 86400; done"
         restart: on-failure
         environment:
             POSTGRES_USER: posthog
@@ -142,13 +143,6 @@ services:
             PGPASSWORD: posthog
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
-            
-    geolite-downloader:
-            image: busybox
-            command: /bin/sh -c "while true; do wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && echo 'GeoLite updated'; sleep 86400; done"
-            volumes:
-                - geolite-data:/share
-            restart: on-failure
         
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
@@ -527,7 +521,7 @@ services:
         depends_on:
             kafka:
                 condition: service_started
-            geolite-downloader:
+            db:
                 condition: service_completed_successfully
                 
     feature-flags:
@@ -558,7 +552,6 @@ services:
         depends_on:
           - db
           - redis
-          - geolite-downloader
 
 volumes:
     zookeeper-data:
