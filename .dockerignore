@@ -9,6 +9,7 @@
 !docker/clickhouse/config.d/*
 !livestream
 !livestream/configs
+!livestream/configs/*
 !common/hogvm
 !common/esbuilder
 !common/plugin_transpiler/*.*
