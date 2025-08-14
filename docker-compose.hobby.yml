@@ -52,7 +52,6 @@ services:
         volumes:
             - ./posthog/idl:/idl
             - ./docker/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
-            - ./docker/clickhouse/config.xml:/etc/clickhouse-server/config.d/config.xml
             - ./docker/clickhouse/config.d/default.xml:/etc/clickhouse-server/config.d/posthog-config.xml
             - ./docker/clickhouse/users.xml:/etc/clickhouse-server/users.d/users.xml
             - ./docker/clickhouse/user_defined_function.xml:/etc/clickhouse-server/config.d/user_defined_function.xml
