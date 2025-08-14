@@ -142,15 +142,17 @@ services:
             PGPASSWORD: posthog
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
-
-    
+            
     geolite-downloader:
         image: busybox
         command: /bin/sh -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb"
         volumes:
             - geolite-data:/share
         restart: "no"
-
+        deploy:
+            restart_policy:
+                condition: on-failure
+                max_attempts: 3
         
     web:
         image: $REGISTRY_URL:$POSTHOG_APP_TAG
