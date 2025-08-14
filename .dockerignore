@@ -2,11 +2,13 @@
 !.devcontainer
 !.kearc
 !bin
-!docker
+!docker/*
+!docker/clickhouse/
 !docker/clickhouse/config.xml
 !docker/clickhouse/config.d/
 !docker/clickhouse/config.d/*
 !livestream
+!livestream/configs
 !common/hogvm
 !common/esbuilder
 !common/plugin_transpiler/*.*
@@ -41,8 +43,8 @@
 !pnpm-workspace.yaml
 !pyproject.toml
 !uv.lock
-!posthog
-!posthog.json
+!
+!.json
 !products
 !requirements-dev.txt
 !requirements.txt
