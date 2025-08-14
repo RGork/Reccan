@@ -135,7 +135,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
-            REDIS_URL: 'redis://redis:6379/'
+            REDIS_URL: 'redis://redis/'
             PGHOST: db
             PGUSER: posthog
             PGPASSWORD: posthog
@@ -145,7 +145,7 @@ services:
     
     geolite-downloader:
         image: busybox
-        command: /bin/sh -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && sleep 3600"
+        command: /bin/sh -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb"
         volumes:
             - geolite-data:/share
         restart: "no"
@@ -190,7 +190,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
-            REDIS_URL: 'redis://redis:6379/'
+            REDIS_URL: 'redis://redis/'
             PGHOST: db
             PGUSER: posthog
             PGPASSWORD: posthog
@@ -232,8 +232,8 @@ services:
             CYCLOTRON_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             PERSONS_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            KAFKA_HOSTS: 'kafka:9092'
-            REDIS_URL: 'redis://redis:6379/'
+            KAFKA_HOSTS: 'kafka'
+            REDIS_URL: 'redis://redis/'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
@@ -293,7 +293,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
-            REDIS_URL: 'redis://redis:6379/'
+            REDIS_URL: 'redis://redis/'
             PGHOST: db
             PGUSER: posthog
             PGPASSWORD: posthog
@@ -385,7 +385,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
-            REDIS_URL: 'redis://redis:6379/'
+            REDIS_URL: 'redis://redis/'
             PGHOST: db
             PGUSER: posthog
             PGPASSWORD: posthog
@@ -405,7 +405,7 @@ services:
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            KAFKA_HOSTS: 'kafka:9092'
+            KAFKA_HOSTS: 'kafka'
             KAFKA_TOPIC: 'clickhouse_app_metrics2'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
@@ -429,8 +429,8 @@ services:
         environment:
             ADDRESS: '0.0.0.0:3000'
             KAFKA_TOPIC: 'events_plugin_ingestion'
-            KAFKA_HOSTS: 'kafka:9092'
-            REDIS_URL: 'redis://redis:6379/'
+            KAFKA_HOSTS: 'kafka'
+            REDIS_URL: 'redis://redis/'
             CAPTURE_MODE: events
             RUST_LOG: 'info,rdkafka=warn'
             CLICKHOUSE_HOST: 'clickhouse'
@@ -445,6 +445,9 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
         expose:
             - "3000"
+        depends_on:
+            - redis
+            - kafka
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
@@ -452,8 +455,8 @@ services:
         environment:
             ADDRESS: '0.0.0.0:3000'
             KAFKA_TOPIC: 'session_recording_snapshot_item_events'
-            KAFKA_HOSTS: 'kafka:9092'
-            REDIS_URL: 'redis://redis:6379/'
+            KAFKA_HOSTS: 'kafka'
+            REDIS_URL: 'redis://redis/'
             CAPTURE_MODE: recordings
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
@@ -467,13 +470,16 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
         expose:
             - "3000"
+        depends_on:
+            - redis
+            - kafka
 
     property-defs-rs:
         image: ghcr.io/posthog/posthog/property-defs-rs:master
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            KAFKA_HOSTS: 'kafka:9092'
+            KAFKA_HOSTS: 'kafka'
             SKIP_WRITES: 'false'
             SKIP_READS: 'false'
             FILTER_MODE: 'opt-out'
@@ -523,7 +529,7 @@ services:
             WRITE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             READ_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             MAXMIND_DB_PATH: '/share/GeoLite2-City.mmdb'
-            REDIS_URL: 'redis://redis:6379/'
+            REDIS_URL: 'redis://redis/'
             ADDRESS: '0.0.0.0:3001'
             RUST_LOG: 'info'
             CLICKHOUSE_HOST: 'clickhouse'
