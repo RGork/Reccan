@@ -523,8 +523,9 @@ services:
             feature-flags:
                 condition: service_completed_successfully
                 
-    feature-flags:
+feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
+        entrypoint: /bin/sh
         command: -c "wget -qO /share/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb || echo 'Download failed'; exec /feature-flags"
         restart: on-failure
         volumes:
