@@ -3,6 +3,9 @@
 !.kearc
 !bin
 !docker
+!docker/clickhouse/config.xml
+!docker/clickhouse/config.d/
+!docker/clickhouse/config.d/*
 !livestream
 !common/hogvm
 !common/esbuilder
