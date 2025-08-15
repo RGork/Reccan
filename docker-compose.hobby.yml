@@ -15,7 +15,7 @@ services:
             - postgres-data:/var/lib/postgresql/data
             - ./docker/postgres-init-scripts:/docker-entrypoint-initdb.d
 
-redis:
+    redis:
         image: redis:6.2.7-alpine
         restart: on-failure
         command: sh -c "
