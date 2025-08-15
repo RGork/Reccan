@@ -495,9 +495,11 @@ services:
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             KAFKA_HOSTS: 'kafka:9092'
-            SKIP_WRITES: 'false'
-            SKIP_READS: 'false'
-            FILTER_MODE: 'opt-out'
+            REDIS_URL: 'redis://redis:6379/'
+            CAPTURE_MODE: events 
+            SKIP_WRITES: false
+            SKIP_READS: false
+            FILTER_MODE: 'opt_out'
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
