@@ -512,8 +512,8 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
-            RUST_BACKTRACE=1
-            RUST_LOG=debug
+            RUST_BACKTRACE: '1'
+            RUST_LOG: 'debug'
         depends_on:
             kafka:
                 condition: service_started
