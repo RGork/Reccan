@@ -494,8 +494,8 @@ services:
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            KAFKA_HOSTS: 'kafka:9092'
-            REDIS_URL: 'redis://redis:6379/'
+            KAFKA_HOSTS: 'kafka'
+            REDIS_URL: 'redis://redis/'
             CAPTURE_MODE: events 
             SKIP_WRITES: false
             SKIP_READS: false
