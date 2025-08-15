@@ -455,8 +455,10 @@ services:
         expose:
             - "3000"
         depends_on:
-            - redis
-            - kafka
+          redis:
+            condition: service_healthy
+          kafka:
+            condition: service_started
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
