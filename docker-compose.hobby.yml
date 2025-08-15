@@ -586,6 +586,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
+            CLICKHOUSE_SINGLE_NODE: 'true'
         expose:
           - "3001"
         depends_on:
@@ -593,6 +594,8 @@ services:
                 condition: service_healthy
             redis:
                 condition: service_healthy
+            kafka:
+                condition: service_started
 
 volumes:
     zookeeper-data:
