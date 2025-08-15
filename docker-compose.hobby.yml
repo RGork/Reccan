@@ -138,8 +138,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
@@ -186,8 +186,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
@@ -241,8 +241,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
@@ -384,8 +384,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
@@ -420,8 +420,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
@@ -448,8 +448,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
@@ -475,8 +475,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
@@ -504,8 +504,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
@@ -525,8 +525,8 @@ services:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
@@ -560,8 +560,8 @@ feature-flags:
             CLICKHOUSE_API_PASSWORD: 'apipass'
             CLICKHOUSE_APP_USER: 'app'
             CLICKHOUSE_APP_PASSWORD: 'apppass'
-            CLICKHOUSE_CLUSTER: 'default'
-            CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
+            CLICKHOUSE_CLUSTER: ''
+            CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
