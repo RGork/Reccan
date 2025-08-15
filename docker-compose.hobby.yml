@@ -15,17 +15,24 @@ services:
             - postgres-data:/var/lib/postgresql/data
             - ./docker/postgres-init-scripts:/docker-entrypoint-initdb.d
 
-    redis:
+redis:
         image: redis:6.2.7-alpine
         restart: on-failure
-        command: sh -c "wget -qO /geolite/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb || echo 'GeoLite download failed'; redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb"
+        command: sh -c "
+          echo 'Starting Redis with GeoLite download...';
+          (wget -q --timeout=10 --tries=2 -O /geolite/GeoLite2-City.mmdb https://git.io/GeoLite2-City.mmdb && echo 'GeoLite downloaded successfully') || echo 'GeoLite download failed, continuing...';
+          echo 'Starting Redis server...';
+          redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb
+          "
         healthcheck:
             test: ['CMD', 'redis-cli', 'ping']
             interval: 3s
             timeout: 10s
             retries: 10
+            start_period: 30s
         volumes:
             - redis-data:/data
+            - geolite-data:/geolite
 
     redis7:
         image: redis:7.2-alpine
