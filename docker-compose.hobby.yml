@@ -142,6 +142,7 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
+            CLICKHOUSE_SINGLE_NODE: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
             REDIS_URL: 'redis://redis/'
@@ -586,7 +587,6 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
-            CLICKHOUSE_SINGLE_NODE: 'true'
         expose:
           - "3001"
         depends_on:
