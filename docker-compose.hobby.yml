@@ -246,12 +246,18 @@ services:
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
-            - db
-            - redis
-            - redis7
-            - clickhouse
-            - kafka
-            - objectstorage
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            redis7:
+                condition: service_started
+            clickhouse:
+                condition: service_started
+            kafka:
+                condition: service_started 
+            objectstorage:
+                condition: service_started
 
     objectstorage:
         image: minio/minio:RELEASE.2025-02-18T16-25-55Z
@@ -398,12 +404,18 @@ services:
             CDP_API_URL: 'http://plugins:6738'
             TEMPORAL_HOST: temporal
         depends_on:
-            - db
-            - redis
-            - clickhouse
-            - kafka
-            - objectstorage
-            - temporal
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
+            clickhouse:
+                condition: service_started
+            kafka:
+                condition: service_started 
+            objectstorage:
+                condition: service_started
+            temporal:
+                condition: service_started
 
     cyclotron-janitor:
         image: ghcr.io/posthog/posthog/cyclotron-janitor:master
