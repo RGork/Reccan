@@ -485,7 +485,7 @@ services:
             - "3000"
         depends_on:
           redis:
-            condition: service_started
+            condition: service_healthy
           kafka:
             condition: service_started
 
@@ -542,7 +542,7 @@ services:
             redis:
                 condition: service_healthy 
                 
-feature-flags:
+    feature-flags:
         image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
         volumes:
@@ -569,8 +569,10 @@ feature-flags:
         expose:
           - "3001"
         depends_on:
-          - db
-          - redis
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
 
 volumes:
     zookeeper-data:
