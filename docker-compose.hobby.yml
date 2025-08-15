@@ -515,6 +515,10 @@ services:
         depends_on:
             kafka:
                 condition: service_started
+            db:
+                condition: service_healthy
+            redis:
+                condition: service_healthy
 
     livestream:
         image: 'ghcr.io/posthog/livestream:main'
