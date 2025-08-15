@@ -141,6 +141,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
             REDIS_URL: 'redis://redis/'
@@ -188,6 +189,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
             REDIS_URL: 'redis://redis/'
@@ -242,6 +244,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
             - db
             - redis
@@ -290,6 +293,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
             REDIS_URL: 'redis://redis/'
@@ -383,6 +387,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
             API_QUERIES_PER_TEAM: '{"1": 100}'
             KAFKA_HOSTS: 'kafka'
             REDIS_URL: 'redis://redis/'
@@ -418,6 +423,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
             db:
                 condition: service_healthy
@@ -445,6 +451,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
             - "3000"
         depends_on:
@@ -471,6 +478,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
             - "3000"
         depends_on:
@@ -499,6 +507,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         depends_on:
             kafka:
                 condition: service_started
@@ -519,6 +528,7 @@ services:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
             - "8080"
         volumes:
@@ -553,6 +563,7 @@ feature-flags:
             CLICKHOUSE_CLUSTER: 'default'
             CLICKHOUSE_MIGRATIONS_CLUSTER: 'default'
             CLICKHOUSE_REPLICATION: false
+            CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
           - "3001"
         depends_on:
