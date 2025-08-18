@@ -47,7 +47,7 @@ services:
             - redis7-data:/data
 
     clickhouse:
-        build: ${CLICKHOUSE_SERVER_IMAGE:-clickhouse/clickhouse-server:25.3.6.56}
+        image: ${CLICKHOUSE_SERVER_IMAGE:-clickhouse/clickhouse-server:25.3.6.56}
         restart: on-failure
         depends_on:
             - kafka
