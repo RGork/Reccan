@@ -1,7 +1,7 @@
 version: '3.8'
 services:
     db:
-        image: ${DOCKER_REGISTRY_PREFIX:-}postgres:12-alpine
+        build: ${DOCKER_REGISTRY_PREFIX:-}postgres:12-alpine
         restart: on-failure
         environment:
             POSTGRES_USER: posthog
@@ -47,7 +47,7 @@ services:
             - redis7-data:/data
 
     clickhouse:
-        image: ${CLICKHOUSE_SERVER_IMAGE:-clickhouse/clickhouse-server:25.3.6.56}
+        build: ${CLICKHOUSE_SERVER_IMAGE:-clickhouse/clickhouse-server:25.3.6.56}
         restart: on-failure
         depends_on:
             - kafka
@@ -111,7 +111,7 @@ services:
             - kafka-data:/bitnami/kafka
 
     worker:
-        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: ./bin/docker-worker-celery --with-scheduler
         restart: on-failure
         environment:
@@ -154,7 +154,7 @@ services:
             CDP_API_URL: 'http://plugins:6738'
         
     web:
-        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: python manage.py runserver 0.0.0.0:8000
         restart: on-failure
         volumes:
@@ -216,7 +216,7 @@ services:
             - objectstorage
 
     plugins:
-        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: ./bin/plugin-server --no-restart-loop
         restart: on-failure
         environment:
@@ -276,7 +276,7 @@ services:
             - "19001"
 
     asyncmigrationscheck:
-        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: python manage.py run_async_migrations --check
         restart: 'no'
         environment:
@@ -371,7 +371,7 @@ services:
                 condition: service_healthy
 
     temporal-django-worker:
-        image: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: $REGISTRY_URL:$POSTHOG_APP_TAG
         command: ./bin/temporal-django-worker
         restart: on-failure
         environment:
@@ -420,7 +420,9 @@ services:
                 condition: service_started
 
     cyclotron-janitor:
-        image: ghcr.io/posthog/posthog/cyclotron-janitor:master
+        # Using fork build instead of original PostHog image
+        build: rgork/reccan/cyclotron-janitor:master
+        # Original: image: ghcr.io/posthog/posthog/cyclotron-janitor:master
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -445,7 +447,9 @@ services:
                 condition: service_started
 
     capture:
-        image: ghcr.io/posthog/posthog/capture:master
+        # Using fork build instead of original PostHog image
+        build: rgork/reccan/capture:master
+        # Original: image: ghcr.io/posthog/posthog/capture:master
         restart: on-failure
         environment:
             ADDRESS: '0.0.0.0:3000'
@@ -475,7 +479,9 @@ services:
             condition: service_started
 
     replay-capture:
-        image: ghcr.io/posthog/posthog/capture:master
+        # Using fork build instead of original PostHog image
+        build: rgork/reccan/capture:master
+        # Original: image: ghcr.io/posthog/posthog/capture:master
         restart: on-failure
         environment:
             ADDRESS: '0.0.0.0:3000'
@@ -504,7 +510,9 @@ services:
             condition: service_started
 
     property-defs-rs:
-        image: ghcr.io/posthog/posthog/property-defs-rs:master
+        # Using fork build instead of original PostHog image
+        build: rgork/reccan/property-defs-rs:master
+        # Original: image: ghcr.io/posthog/posthog/property-defs-rs:master
         restart: on-failure
         environment:
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -537,7 +545,9 @@ services:
                 condition: service_healthy
 
     livestream:
-        image: 'ghcr.io/posthog/livestream:main'
+        # Using fork build instead of original PostHog image
+        build: 'rgork/reccan/livestream:main'
+        # Original: image: 'ghcr.io/posthog/livestream:main'
         restart: on-failure
         environment:
             LIVESTREAM_JWT_SECRET: ${POSTHOG_SECRET}
@@ -565,7 +575,9 @@ services:
                 condition: service_healthy 
                 
     feature-flags:
-        image: ghcr.io/posthog/posthog/feature-flags:master
+        # Using fork build instead of original PostHog image
+        build: rgork/reccan/feature-flags:master
+        # Original: image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
         volumes:
           - geolite-data:/share
