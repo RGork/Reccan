@@ -38,8 +38,8 @@
 !pnpm-workspace.yaml
 !pyproject.toml
 !uv.lock
-!
-!.json
+!posthog
+!posthog.json
 !products
 !requirements-dev.txt
 !requirements.txt
