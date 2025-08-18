@@ -115,6 +115,7 @@ services:
         command: ./bin/docker-worker-celery --with-scheduler
         restart: on-failure
         environment:
+            SKIP_ASYNC_MIGRATIONS_SETUP: 1
             SITE_URL: https://$DOMAIN
             SECRET_KEY: $POSTHOG_SECRET
             OBJECT_STORAGE_ACCESS_KEY_ID: 'object_storage_root_user'
