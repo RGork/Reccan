@@ -72,7 +72,7 @@ app.autodiscover_tasks()
 
 # Make sure Redis doesn't add too many connections
 # https://stackoverflow.com/questions/47106592/redis-connections-not-being-released-after-celery-task-is-complete
-app.conf.broker_pool_limit = 0
+app.conf.broker_pool_limit = 1
 
 app.steps["worker"].add(DjangoStructLogInitStep)
 
