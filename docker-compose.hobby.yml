@@ -111,7 +111,7 @@ services:
             - kafka-data:/bitnami/kafka
 
     worker:
-        build: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: .
         command: ./bin/docker-worker-celery --with-scheduler
         restart: on-failure
         environment:
@@ -154,7 +154,7 @@ services:
             CDP_API_URL: 'http://plugins:6738'
         
     web:
-        build: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: .
         command: python manage.py runserver 0.0.0.0:8000
         restart: on-failure
         volumes:
@@ -216,7 +216,7 @@ services:
             - objectstorage
 
     plugins:
-        build: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: .
         command: ./bin/plugin-server --no-restart-loop
         restart: on-failure
         environment:
@@ -276,7 +276,7 @@ services:
             - "19001"
 
     asyncmigrationscheck:
-        build: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: .
         command: python manage.py run_async_migrations --check
         restart: 'no'
         environment:
@@ -371,7 +371,7 @@ services:
                 condition: service_healthy
 
     temporal-django-worker:
-        build: $REGISTRY_URL:$POSTHOG_APP_TAG
+        build: .
         command: ./bin/temporal-django-worker
         restart: on-failure
         environment:
