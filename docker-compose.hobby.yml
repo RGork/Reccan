@@ -180,7 +180,7 @@ services:
             SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             EXTERNAL_URL: https://$DOMAIN  
-            CSRF_TRUSTED_ORIGINS: https://$DOMAIN
+            CSRF_TRUSTED_ORIGINS: "*"
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
