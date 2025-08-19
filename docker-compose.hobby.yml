@@ -161,6 +161,7 @@ services:
             - geolite-data:/app/geolite
         environment:
             SITE_URL: https://$DOMAIN
+            CORS_ORIGIN_ALLOW_ALL: true
             LIVESTREAM_HOST: 'https://${DOMAIN}:8666'
             SECRET_KEY: $POSTHOG_SECRET
             OBJECT_STORAGE_ACCESS_KEY_ID: 'object_storage_root_user'
