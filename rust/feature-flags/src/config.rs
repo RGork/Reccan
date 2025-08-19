@@ -119,7 +119,7 @@ pub struct Config {
     #[envconfig(default = "50")]
     pub max_pg_connections: u32,
 
-    #[envconfig(default = "redis://localhost:6379/")]
+    #[envconfig(default = "redis://redis:6379/")
     pub redis_url: String,
 
     #[envconfig(default = "")]
