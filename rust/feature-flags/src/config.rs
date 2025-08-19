@@ -198,7 +198,7 @@ impl Config {
     pub fn default_test_config() -> Self {
         Self {
             address: SocketAddr::from_str("127.0.0.1:0").unwrap(),
-            redis_url: "redis://localhost:6379/".to_string(),
+            redis_url: "redis://redis:6379/".to_string(),
             redis_reader_url: "".to_string(),
             redis_writer_url: "".to_string(),
             write_database_url: "postgres://posthog:posthog@localhost:5432/test_posthog"
@@ -302,7 +302,7 @@ mod tests {
         );
         assert_eq!(config.max_concurrency, 1000);
         assert_eq!(config.max_pg_connections, 50);
-        assert_eq!(config.redis_url, "redis://localhost:6379/");
+        assert_eq!(config.redis_url, "redis://redis:6379/");
         assert_eq!(config.team_ids_to_track, TeamIdCollection::All);
         assert_eq!(
             config.new_analytics_capture_excluded_team_ids,
@@ -331,7 +331,7 @@ mod tests {
         );
         assert_eq!(config.max_concurrency, 1000);
         assert_eq!(config.max_pg_connections, 10);
-        assert_eq!(config.redis_url, "redis://localhost:6379/");
+        assert_eq!(config.redis_url, "redis://redis:6379/");
         assert_eq!(config.team_ids_to_track, TeamIdCollection::All);
         assert_eq!(
             config.new_analytics_capture_excluded_team_ids,
@@ -357,7 +357,7 @@ mod tests {
         );
         assert_eq!(config.max_concurrency, 1000);
         assert_eq!(config.max_pg_connections, 10);
-        assert_eq!(config.redis_url, "redis://localhost:6379/");
+        assert_eq!(config.redis_url, "redis://redis:6379/");
         assert_eq!(config.team_ids_to_track, TeamIdCollection::All);
         assert_eq!(
             config.new_analytics_capture_excluded_team_ids,
