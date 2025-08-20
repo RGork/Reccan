@@ -81,7 +81,7 @@ ENCRYPTION_SALT_KEYS = get_list(os.getenv("ENCRYPTION_SALT_KEYS", "00beef0000bee
 
 INTERNAL_IPS = ["127.0.0.1", "172.18.0.1"]  # Docker IP
 if os.getenv("CORS_ALLOWED_ORIGINS", False):
-    CORS_ORIGIN_ALLOW_ALL = False
+    CORS_ORIGIN_ALLOW_ALL = True
     CORS_ALLOWED_ORIGINS = get_list(os.getenv("CORS_ALLOWED_ORIGINS", ""))
 else:
     CORS_ORIGIN_ALLOW_ALL = True
