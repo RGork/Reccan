@@ -162,6 +162,7 @@ services:
         environment:
             SITE_URL: https://$DOMAIN
             CORS_ORIGIN_ALLOW_ALL: true
+            NEW_ANALYTICS_CAPTURE_EXCLUDED_TEAM_IDS: "1"
             LIVESTREAM_HOST: 'https://${DOMAIN}:8666'
             SECRET_KEY: $POSTHOG_SECRET
             OBJECT_STORAGE_ACCESS_KEY_ID: 'object_storage_root_user'
@@ -179,8 +180,7 @@ services:
             DISABLE_SECURE_SSL_REDIRECT: true
             SECURE_PROXY_SSL_HEADER: 'HTTP_X_FORWARDED_PROTO,https'
             DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
-            EXTERNAL_URL: https://$DOMAIN  
-            CSRF_TRUSTED_ORIGINS: "*"
+            EXTERNAL_URL: https://$DOMAIN
             CLICKHOUSE_HOST: 'clickhouse'
             CLICKHOUSE_DATABASE: 'posthog'
             CLICKHOUSE_SECURE: 'false'
