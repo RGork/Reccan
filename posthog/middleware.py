@@ -388,38 +388,38 @@ class ShortCircuitMiddleware:
         )
 
     def __call__(self, request: HttpRequest):
-    # Bypass CSRF voor alle tracking endpoints
-    if request.path in ["/decide/", "/decide", "/flags/", "/flags", "/e/", "/e", "/batch/", "/batch"]:
-        request._dont_enforce_csrf_checks = True
-    
-    # Bestaande decide logica blijft ongewijzigd
-    if request.path == "/decide/" or request.path == "/decide":
-        try:
-            # :KLUDGE: Manually tag ClickHouse queries as CHMiddleware is skipped
-            tag_queries(
-                kind="request",
-                id=request.path,
-                route_id=resolve(request.path).route,
-                http_referer=request.META.get("HTTP_REFERER"),
-                http_user_agent=request.META.get("HTTP_USER_AGENT"),
-            )
-            if self.decide_throttler.allow_request(request, None):
-                return get_decide(request)
-            else:
-                return cors_response(
-                    request,
-                    generate_exception_response(
-                        "decide",
-                        f"Rate limit exceeded ",
-                        code="rate_limit_exceeded",
-                        status_code=status.HTTP_429_TOO_MANY_REQUESTS,
-                    ),
+        # Bypass CSRF voor alle tracking endpoints
+        if request.path in ["/decide/", "/decide", "/flags/", "/flags", "/e/", "/e", "/batch/", "/batch"]:
+            request._dont_enforce_csrf_checks = True
+        
+        # Bestaande decide logica blijft ongewijzigd
+        if request.path == "/decide/" or request.path == "/decide":
+            try:
+                # :KLUDGE: Manually tag ClickHouse queries as CHMiddleware is skipped
+                tag_queries(
+                    kind="request",
+                    id=request.path,
+                    route_id=resolve(request.path).route,
+                    http_referer=request.META.get("HTTP_REFERER"),
+                    http_user_agent=request.META.get("HTTP_USER_AGENT"),
                 )
-        finally:
-            reset_query_tags()
-    
-    response: HttpResponse = self.get_response(request)
-    return response
+                if self.decide_throttler.allow_request(request, None):
+                    return get_decide(request)
+                else:
+                    return cors_response(
+                        request,
+                        generate_exception_response(
+                            "decide",
+                            f"Rate limit exceeded ",
+                            code="rate_limit_exceeded",
+                            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                        ),
+                    )
+            finally:
+                reset_query_tags()
+        
+        response: HttpResponse = self.get_response(request)
+        return response
 
 
 def per_request_logging_context_middleware(
