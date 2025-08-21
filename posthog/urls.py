@@ -25,6 +25,7 @@ from posthog.api import (
     api_not_found,
     authentication,
     decide,
+    capture,
     hog_function_template,
     remote_config,
     report,
