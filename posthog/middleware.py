@@ -25,7 +25,6 @@ from django_prometheus.middleware import (
 from rest_framework import status
 from statshog.defaults.django import statsd
 
-from posthog.api.capture import get_event
 from posthog.api.decide import get_decide
 from posthog.api.shared import UserBasicSerializer
 from posthog.clickhouse.client.execute import clickhouse_query_counter
