@@ -42,11 +42,15 @@ from .utils_cors import cors_response
 
 ALWAYS_ALLOWED_ENDPOINTS = [
     "decide",
+    "engage",
+    "track",
+    "capture",
+    "batch",
+    "e",
+    "s",
     "static",
     "_health",
     "flags",
-    "messaging-preferences",
-    "i",
 ]
 
 default_cookie_options = {
