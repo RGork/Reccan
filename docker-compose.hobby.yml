@@ -482,7 +482,7 @@ services:
         image: traefik/whoami  # Dummy image, we gebruiken alleen de labels
         labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`))"
+        - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`) || Path(`/i/v0`) || PathPrefix(`/i/v0/`))"
         - "traefik.http.routers.posthog-flags.rule=Host(`dashboard.reccan.nl`) && (Path(`/flags`) || PathPrefix(`/flags/`))"
         - "traefik.http.routers.posthog-capture.entrypoints=https"
         - "traefik.http.routers.posthog-flags.entrypoints=https"
