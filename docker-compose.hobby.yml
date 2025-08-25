@@ -162,6 +162,7 @@ services:
         environment:
             SITE_URL: https://$DOMAIN
             CORS_ORIGIN_ALLOW_ALL: true
+            CORS_ALLOW_ALL_ORIGINS: true
             NEW_ANALYTICS_CAPTURE_EXCLUDED_TEAM_IDS: "1"
             LIVESTREAM_HOST: 'https://${DOMAIN}:8666'
             SECRET_KEY: $POSTHOG_SECRET
@@ -208,6 +209,7 @@ services:
             - "traefik.http.routers.posthog.rule=Host(`dashboard.reccan.nl`)"
             - "traefik.http.routers.posthog.entrypoints=https"
             - "traefik.http.routers.posthog.tls.certresolver=letsencrypt"
+            - "traefik.http.routers.posthog.priority=50"  # Lagere prioriteit
             - "traefik.http.services.posthog.loadbalancer.server.port=8000"
         depends_on:
             - db
@@ -469,11 +471,25 @@ services:
             CLICKHOUSE_SINGLE_SHARD: 'true'
         expose:
             - "3000"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.posthog-capture.loadbalancer.server.port=3000"
         depends_on:
           redis:
             condition: service_healthy
           kafka:
             condition: service_started
+
+    capture-proxy:
+        image: traefik/whoami  # Dummy image, we gebruiken alleen de labels
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`))"
+            - "traefik.http.routers.posthog-capture.entrypoints=https"
+            - "traefik.http.routers.posthog-capture.tls.certresolver=letsencrypt"
+            - "traefik.http.routers.posthog-capture.priority=100"  # Hogere prioriteit dan main web
+            - "traefik.http.services.posthog-capture.loadbalancer.server.port=3000"
+            - "traefik.http.routers.posthog-capture.service=posthog-capture"
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
