@@ -225,8 +225,6 @@ urlpatterns = [
     # ingestion
     # NOTE: When adding paths here that should be public make sure to update ALWAYS_ALLOWED_ENDPOINTS in middleware.py
     opt_slash_path("decide", decide.get_decide),
-    opt_slash_path("e", event_ingestion_view),  # missing i think (Rein)
-    opt_slash_path("flag", feature_flag_evaluation_view),  # missing i think (Rein)
     opt_slash_path("report", report.get_csp_event),  # CSP violation reports
     opt_slash_path("robots.txt", robots_txt),
     opt_slash_path(".well-known/security.txt", security_txt),
