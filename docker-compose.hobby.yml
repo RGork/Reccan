@@ -469,8 +469,6 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
-        expose:
-            - "3000"
         labels:
             - "traefik.enable=true"
             - "traefik.http.services.posthog-capture.loadbalancer.server.port=3000"
@@ -483,13 +481,20 @@ services:
     capture-proxy:
         image: traefik/whoami  # Dummy image, we gebruiken alleen de labels
         labels:
-            - "traefik.enable=true"
-            - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`))"
-            - "traefik.http.routers.posthog-capture.entrypoints=https"
-            - "traefik.http.routers.posthog-capture.tls.certresolver=letsencrypt"
-            - "traefik.http.routers.posthog-capture.priority=100"  # Hogere prioriteit dan main web
-            - "traefik.http.services.posthog-capture.loadbalancer.server.port=3000"
-            - "traefik.http.routers.posthog-capture.service=posthog-capture"
+        - "traefik.enable=true"
+        - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`))"
+        - "traefik.http.routers.posthog-flags.rule=Host(`dashboard.reccan.nl`) && (Path(`/flags`) || PathPrefix(`/flags/`))"
+        - "traefik.http.routers.posthog-capture.entrypoints=https"
+        - "traefik.http.routers.posthog-flags.entrypoints=https"
+        - "traefik.http.routers.posthog-capture.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.posthog-flags.tls.certresolver=letsencrypt"
+        - "traefik.http.routers.posthog-capture.priority=100"
+        - "traefik.http.routers.posthog-flags.priority=100"
+        - "traefik.http.routers.posthog-capture.service=posthog-capture"
+        - "traefik.http.routers.posthog-flags.service=posthog-flags"
+        depends_on:
+            - capture
+            
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
@@ -605,8 +610,9 @@ services:
             CLICKHOUSE_MIGRATIONS_CLUSTER: ''
             CLICKHOUSE_REPLICATION: false
             CLICKHOUSE_SINGLE_SHARD: 'true'
-        expose:
-          - "3001"
+        labels:
+            - "traefik.enable=true"
+            - "traefik.http.services.posthog-flags.loadbalancer.server.port=3001"
         depends_on:
             db:
                 condition: service_healthy
