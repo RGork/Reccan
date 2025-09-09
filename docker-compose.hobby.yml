@@ -152,6 +152,14 @@ services:
             PGPASSWORD: posthog
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
+            EMAIL_HOST: smtp.sendgrid.net
+            EMAIL_PORT: 587
+            EMAIL_HOST_USER: apikey
+            EMAIL_HOST_PASSWORD: $sendgridapi
+            EMAIL_USE_TLS: true
+            EMAIL_USE_SSL: false
+            EMAIL_DEFAULT_FROM: info@reccan.nl
+            EMAIL_ENABLED: true
         
     web:
         build: .
@@ -202,6 +210,14 @@ services:
             PGPASSWORD: posthog
             DEPLOYMENT: hobby
             CDP_API_URL: 'http://plugins:6738'
+            EMAIL_HOST: smtp.sendgrid.net
+            EMAIL_PORT: 587
+            EMAIL_HOST_USER: apikey
+            EMAIL_HOST_PASSWORD: $sendgridapi
+            EMAIL_USE_TLS: true
+            EMAIL_USE_SSL: false
+            EMAIL_DEFAULT_FROM: info@reccan.nl
+            EMAIL_ENABLED: true
         expose:
             - "8000"
         labels:
