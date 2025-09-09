@@ -87,4 +87,4 @@ else:
     CORS_ORIGIN_ALLOW_ALL = True
 
 BLOCKED_GEOIP_REGIONS = get_list(os.getenv("BLOCKED_GEOIP_REGIONS", ""))
-CSRF_TRUSTED_ORIGINS = ["https://reccan.nl", "https://dashboard.reccan.nl"]  # DEBUG: force override
+CSRF_TRUSTED_ORIGINS = ["https://reccan.nl", "https://dashboard.reccan.nl", "https://aditech.nl", "https://aaff.nl"]  # DEBUG: force override
