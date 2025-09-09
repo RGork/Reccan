@@ -21,6 +21,8 @@ postgres:
 
 cors_allow_origins:
     - "https://reccan.nl"
+    - "https://aditech.nl"
+    - "https://aaff.nl"
     - "https://dashboard.reccan.nl"
 
 parallelism: 7
