@@ -12,7 +12,7 @@ services:
             interval: 5s
             timeout: 5s
         volumes:
-            - postgres-data:/var/lib/postgresql/data
+            - rs8cwk4o4kcsocssscs4o4gg_postgres-data:/var/lib/postgresql/data
             - ./docker/postgres-init-scripts:/docker-entrypoint-initdb.d
 
     redis:
@@ -31,8 +31,8 @@ services:
             retries: 10
             start_period: 30s
         volumes:
-            - redis-data:/data
-            - geolite-data:/geolite
+            - rs8cwk4o4kcsocssscs4o4gg_redis-data:/data
+            - rs8cwk4o4kcsocssscs4o4gg_geolite-data:/geolite
 
     redis7:
         image: redis:7.2-alpine
@@ -44,7 +44,7 @@ services:
             timeout: 10s
             retries: 10
         volumes:
-            - redis7-data:/data
+            - rs8cwk4o4kcsocssscs4o4gg_redis7-data:/data
 
     clickhouse:
         image: ${CLICKHOUSE_SERVER_IMAGE:-clickhouse/clickhouse-server:25.3.6.56}
@@ -64,15 +64,15 @@ services:
             - ./docker/clickhouse/users.xml:/etc/clickhouse-server/users.d/users.xml
             - ./docker/clickhouse/user_defined_function.xml:/etc/clickhouse-server/config.d/user_defined_function.xml
             - ./posthog/user_scripts:/var/lib/clickhouse/user_scripts
-            - clickhouse-data:/var/lib/clickhouse
+            - rs8cwk4o4kcsocssscs4o4gg_clickhouse-data:/var/lib/clickhouse
 
     zookeeper:
         image: zookeeper:3.7.0
         restart: on-failure
         volumes:
-            - zookeeper-datalog:/datalog
-            - zookeeper-data:/data
-            - zookeeper-logs:/logs
+            - rs8cwk4o4kcsocssscs4o4gg_zookeeper-datalog:/datalog
+            - rs8cwk4o4kcsocssscs4o4gg_zookeeper-data:/data
+            - rs8cwk4o4kcsocssscs4o4gg_zookeeper-logs:/logs
 
     kafka:
         image: docker.redpanda.com/redpandadata/redpanda:v25.1.9
@@ -108,7 +108,7 @@ services:
             timeout: 10s
             retries: 10
         volumes:
-            - kafka-data:/bitnami/kafka
+            - rs8cwk4o4kcsocssscs4o4gg_kafka-data:/bitnami/kafka
 
     worker:
         build: .
@@ -166,7 +166,7 @@ services:
         command: python manage.py runserver 0.0.0.0:8000 --noreload
         restart: on-failure
         volumes:
-            - geolite-data:/app/geolite
+            - rs8cwk4o4kcsocssscs4o4gg_geolite-data:/app/geolite
         environment:
             SITE_URL: https://$DOMAIN
             CORS_ORIGIN_ALLOW_ALL: true
@@ -225,7 +225,7 @@ services:
             - "traefik.http.routers.posthog.rule=Host(`dashboard.reccan.nl`)"
             - "traefik.http.routers.posthog.entrypoints=https"
             - "traefik.http.routers.posthog.tls.certresolver=letsencrypt"
-            - "traefik.http.routers.posthog.priority=50"  # Lagere prioriteit
+            - "traefik.http.routers.posthog.priority=50"
             - "traefik.http.services.posthog.loadbalancer.server.port=8000"
         depends_on:
             - db
@@ -289,7 +289,7 @@ services:
         entrypoint: sh
         command: -c 'mkdir -p /data/posthog && minio server --address ":19000" --console-address ":19001" /data'
         volumes:
-            - objectstorage:/data
+            - rs8cwk4o4kcsocssscs4o4gg_objectstorage:/data
         expose:
             - "19000"
             - "19001"
@@ -332,7 +332,6 @@ services:
         deploy:
             replicas: 0
 
-    # Temporal containers
     temporal:
         image: temporalio/auto-setup:1.20.0
         restart: on-failure
@@ -495,7 +494,7 @@ services:
             condition: service_started
 
     capture-proxy:
-        image: traefik/whoami  # Dummy image, we gebruiken alleen de labels
+        image: traefik/whoami
         labels:
         - "traefik.enable=true"
         - "traefik.http.routers.posthog-capture.rule=Host(`dashboard.reccan.nl`) && (Path(`/e`) || PathPrefix(`/e/`) || Path(`/capture`) || PathPrefix(`/capture/`) || Path(`/batch`) || PathPrefix(`/batch/`) || Path(`/i/v0`) || PathPrefix(`/i/v0/`))"
@@ -510,7 +509,6 @@ services:
         - "traefik.http.routers.posthog-flags.service=posthog-flags"
         depends_on:
             - capture
-            
 
     replay-capture:
         image: ghcr.io/posthog/posthog/capture:master
@@ -595,7 +593,7 @@ services:
             - "8080"
         volumes:
             - ./livestream/configs/configs.yml:/configs/configs.yml
-            - geolite-data:/share
+            - rs8cwk4o4kcsocssscs4o4gg_geolite-data:/share
         depends_on:
             kafka:
                 condition: service_started
@@ -606,7 +604,7 @@ services:
         image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
         volumes:
-          - geolite-data:/share
+          - rs8cwk4o4kcsocssscs4o4gg_geolite-data:/share
         environment:
             WRITE_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
             READ_DATABASE_URL: 'postgres://posthog:posthog@db:5432/posthog'
@@ -639,16 +637,25 @@ services:
             kafka:
                 condition: service_started
 
+# AANGEPASTE VOLUMES MET COOLIFY NAMING
 volumes:
-    zookeeper-data:
-    zookeeper-datalog:
-    zookeeper-logs:
-    objectstorage:
-    postgres-data:
-    clickhouse-data:
-    caddy-data:
-    caddy-config:
-    redis-data:
-    redis7-data:
-    kafka-data:
-    geolite-data:
+    rs8cwk4o4kcsocssscs4o4gg_postgres-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_redis-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_geolite-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_redis7-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_clickhouse-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_zookeeper-datalog:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_zookeeper-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_zookeeper-logs:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_kafka-data:
+        external: true
+    rs8cwk4o4kcsocssscs4o4gg_objectstorage:
+        external: true
