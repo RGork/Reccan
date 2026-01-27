@@ -24,12 +24,12 @@ services:
           echo 'Starting Redis server...';
           redis-server --maxmemory-policy allkeys-lru --maxmemory 200mb
           "
-    healthcheck:
-        test: ["CMD", "rpk", "cluster", "health"]
-        interval: 30s
-        timeout: 10s
-        retries: 5
-        start_period: 60s
+        healthcheck:
+            test: ['CMD', 'redis-cli', 'ping']
+            interval: 3s
+            timeout: 10s
+            retries: 10
+            start_period: 30s
         volumes:
             - redis-data:/data
             - geolite-data:/geolite
