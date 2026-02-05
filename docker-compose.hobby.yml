@@ -115,6 +115,8 @@ services:
         build: .
         command: ./bin/docker-worker-celery --with-scheduler
         restart: on-failure
+        deploy:
+            replicas: 0 #uitzetten 
         environment:
             SKIP_ASYNC_MIGRATIONS_SETUP: 1
             SITE_URL: https://$DOMAIN
