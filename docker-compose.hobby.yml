@@ -607,7 +607,7 @@ services:
         image: ghcr.io/posthog/posthog/feature-flags:master
         restart: on-failure
         deploy:
-            replicas: 0
+            replicas: 0 #zorgt er voor dat feature flags niet meegenomen wordt
         volumes:
           - geolite-data:/share
         environment:
