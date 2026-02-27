@@ -56,6 +56,7 @@ services:
             CLICKHOUSE_SKIP_USER_SETUP: 1
             CLICKHOUSE_CONFIG_MACROS_HOSTCLUSTERTYPE: single
             CLICKHOUSE_CONFIG_MACROS_HOSTCLUSTERROLE: single
+            CLICKHOUSE_MAX_EXECUTION_TIME: 180
         volumes:
             - ./posthog/idl:/idl
             - ./docker/clickhouse/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
@@ -116,7 +117,7 @@ services:
         command: ./bin/docker-worker-celery --with-scheduler
         restart: on-failure
         deploy:
-            replicas: 0 #uitzetten 
+            replicas: 1 #uitzetten 
         environment:
             SKIP_ASYNC_MIGRATIONS_SETUP: 1
             SITE_URL: https://$DOMAIN
